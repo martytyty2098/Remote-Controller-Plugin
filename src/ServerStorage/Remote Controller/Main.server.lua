@@ -1,5 +1,7 @@
 local folder = script.Parent
 local selection = game:GetService("Selection")
+local run = game:GetService("RunService")
+
 local widgetInfo = DockWidgetPluginGuiInfo.new(Enum.InitialDockState.Float, false, false, 200, 50, 100, 30)
 local widget = plugin:CreateDockWidgetPluginGui("Remote Controller", widgetInfo)
 widget.Title = "0 EVENTS AND 0 FUNCTIONS SELECTED"
@@ -12,66 +14,88 @@ argsBar.Parent = widget
 local toolbar = plugin:CreateToolbar("martytyty2098")
 local button = toolbar:CreateButton(
 	"Remote Controller",
-	"Super power to trigger remote events and functions at will",
+	"Super power to trigger remote events and functions at will, use at runtime",
 	"rbxassetid://14749933281"
 )
 
-button.Click:Connect(function()
-	widget.Enabled = not widget.Enabled
-end)
+local function atRuntime()
+	button.Click:Connect(function()
+		widget.Enabled = not widget.Enabled
+	end)
 
-widget.Changed:Connect(function(property)
-	if property == "Enabled" then
-		button.Enabled = false
-		button.Enabled = true
-		if widget.Enabled then
-			button:SetActive(true)
-		else
-			button:SetActive(false)
+	widget.Changed:Connect(function(property)
+		if property == "Enabled" then
+			--button.Enabled = false
+			--button.Enabled = true
+			if widget.Enabled then
+				button:SetActive(true)
+			else
+				button:SetActive(false)
+			end
 		end
-	end
-end)
+	end)
 
-local selectedEvents: { RemoteEvent } = {}
-local selectedFunctions: { RemoteFunction } = {}
-local eventAmount = 0
-local functionAmount = 0
+	local selectedEvents: { RemoteEvent } = {}
+	local selectedFunctions: { RemoteFunction } = {}
+	local eventAmount = 0
+	local functionAmount = 0
 
--- get all selected remote events/functions
-selection.SelectionChanged:Connect(function()
-	table.clear(selectedEvents)
-	table.clear(selectedFunctions)
-	eventAmount = 0
-	functionAmount = 0
-	local selected = selection:Get()
-	for _, obj in pairs(selected) do
-		if obj.ClassName == "RemoteEvent" then
-			table.insert(selectedEvents, obj)
-			eventAmount += 1
-		elseif obj.ClassName == "RemoteFunction" then
-			table.insert(selectedFunctions, obj)
-			functionAmount += 1
+	-- get all selected remote events/functions
+	selection.SelectionChanged:Connect(function()
+		table.clear(selectedEvents)
+		table.clear(selectedFunctions)
+		eventAmount = 0
+		functionAmount = 0
+		local selected = selection:Get()
+		for _, obj in pairs(selected) do
+			if obj.ClassName == "RemoteEvent" then
+				table.insert(selectedEvents, obj)
+				eventAmount += 1
+			elseif obj.ClassName == "RemoteFunction" then
+				table.insert(selectedFunctions, obj)
+				functionAmount += 1
+			end
 		end
-	end
-	widget.Title = string.format("%u EVENTS AND %u FUNCTIONS SELECTED", eventAmount, functionAmount)
-end)
+		widget.Title = string.format("%u EVENTS AND %u FUNCTIONS SELECTED", eventAmount, functionAmount)
+	end)
 
-argsBar.FocusLost:Connect(function(enterPressed: boolean)
-	if not enterPressed then
-		return
-	end
+	-- will be used to execute loadstring on the server
+	print("IsServer:", run:IsServer())
+	local sendLoadString: RemoteFunction = game:GetService("ReplicatedStorage")
+		:WaitForChild("__plugin_LoadStringBridge")
 
-	local input = argsBar.ContentText
-	local values = loadstring("return " .. "{" .. input .. "}")() -- pcall
-	for i, v in pairs(values) do
-		print(i, v, typeof(v))
+	argsBar.FocusLost:Connect(function(enterPressed: boolean)
+		if not enterPressed then
+			return
+		end
+		print("input:", argsBar.ContentText)
+		local values = sendLoadString:InvokeServer(argsBar.ContentText) -- pcall
+		print("Args:")
+		for i, v in pairs(values) do
+			print(i, v, typeof(v))
+		end
+		--[[print("Events:")
+		for i, v in pairs(selectedEvents) do
+			print(i, v)
+		end
+		print("Functions:")
+		for i, v in pairs(selectedFunctions) do
+			print(i, v)
+		end--]]
+	end)
+end
+
+if not run:IsRunning() then
+	button.Enabled = false
+	if not game:GetService("ServerScriptService"):WaitForChild("__plugin_LoadStringExecution", 3) then
+		local executor: Script = folder:WaitForChild("__plugin_LoadStringExecution"):Clone()
+		executor.Enabled = true
+		executor.Parent = game:GetService("ServerScriptService")
 	end
-	print("Events:")
-	for i, v in pairs(selectedEvents) do
-		print(i, v)
+	if not game:GetService("ReplicatedStorage"):WaitForChild("__plugin_LoadStringBridge", 3) then
+		local bridge: RemoteFunction = folder:WaitForChild("__plugin_LoadStringBridge"):Clone()
+		bridge.Parent = game:GetService("ReplicatedStorage")
 	end
-	print("Functions:")
-	for i, v in pairs(selectedFunctions) do
-		print(i, v)
-	end
-end)
+else
+	atRuntime()
+end
