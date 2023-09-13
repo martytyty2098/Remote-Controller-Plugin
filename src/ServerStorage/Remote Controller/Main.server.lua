@@ -25,8 +25,6 @@ local function atRuntime()
 
 	widget.Changed:Connect(function(property)
 		if property == "Enabled" then
-			--button.Enabled = false
-			--button.Enabled = true
 			if widget.Enabled then
 				button:SetActive(true)
 			else
@@ -60,7 +58,6 @@ local function atRuntime()
 	end)
 
 	-- will be used to execute loadstring on the server
-	print("IsServer:", run:IsServer())
 	local sendLoadString: RemoteFunction = game:GetService("ReplicatedStorage")
 		:WaitForChild("__plugin_LoadStringBridge")
 
@@ -68,20 +65,26 @@ local function atRuntime()
 		if not enterPressed then
 			return
 		end
-		print("input:", argsBar.ContentText)
-		local values = sendLoadString:InvokeServer(argsBar.ContentText) -- pcall
-		print("Args:")
-		for i, v in pairs(values) do
-			print(i, v, typeof(v))
+		local values = sendLoadString:InvokeServer(argsBar.ContentText)
+		if not values then
+			warn("Remote Controller Plugin error: Invalid user input\nInput:", argsBar.ContentText)
+			return
 		end
-		--[[print("Events:")
+
+		print("Values:")
+		for i, v in pairs(values) do
+			print("Index:", i, "Value:", v, "Type:", typeof(v))
+		end
+		print("Events:")
 		for i, v in pairs(selectedEvents) do
 			print(i, v)
+			v:FireServer(table.unpack(values))
 		end
 		print("Functions:")
 		for i, v in pairs(selectedFunctions) do
 			print(i, v)
-		end--]]
+			v:InvokeServer(table.unpack(values))
+		end
 	end)
 end
 
