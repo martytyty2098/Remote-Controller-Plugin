@@ -127,18 +127,10 @@ local function atRuntime()
 			return
 		end
 
-		print("Values:")
-		for i, v in pairs(values) do
-			print("Index:", i, "Value:", v, "Type:", typeof(v))
-		end
-		print("Events:")
-		for i, v in pairs(selectedEvents) do
-			print(i, v)
+		for _, v in pairs(selectedEvents) do
 			v:FireServer(table.unpack(values))
 		end
-		print("Functions:")
-		for i, v in pairs(selectedFunctions) do
-			print(i, v)
+		for _, v in pairs(selectedFunctions) do
 			v:InvokeServer(table.unpack(values))
 		end
 	end
