@@ -46,9 +46,12 @@ local function atRuntime()
 		local fontWidth = argsBar.TextBounds.X / string.len(argsBar.ContentText)
 		local cursorPosX = argsBar.CursorPosition * fontWidth
 
-		-- expand the scrolling frame as it runs out of space
-		if argsBar.TextBounds.X + fontWidth >= scroll.AbsoluteCanvasSize.X then
-			scroll.CanvasSize = UDim2.new(0, argsBar.TextBounds.X * 2, 0, scroll.CanvasSize.Y.Scale)
+		-- expand the scrolling frame as it runs out of space or shrink it back
+		if
+			argsBar.TextBounds.X + fontWidth >= scroll.AbsoluteCanvasSize.X
+			or argsBar.TextBounds.X < scroll.AbsoluteCanvasSize.X / 2
+		then
+			scroll.CanvasSize = UDim2.new(0, argsBar.TextBounds.X * 1.5, 0, scroll.CanvasSize.Y.Scale)
 		end
 
 		-- adjust canvas position if the cursor goes out of bounds
@@ -67,7 +70,7 @@ local function atRuntime()
 			scroll.Size = UDim2.fromScale(scroll.Size.X.Scale, 1)
 		elseif fireButton.AbsoluteSize.Y > 20 then
 			fireButton.Visible = true
-			scroll.Size = UDim2.fromScale(scroll.Size.X.Scale, 0.8)
+			scroll.Size = UDim2.fromScale(scroll.Size.X.Scale, 0.7)
 		end
 	end)
 
