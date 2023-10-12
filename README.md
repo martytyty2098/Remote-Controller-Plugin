@@ -1,6 +1,8 @@
 # Remote-Controller-Plugin
 A plugin that allows you to trigger remote events and functions during play mode (aka runtime) AND pass any values, aka arguments to them. Good for testing your game's network security from an exploiter's perspective. Uses `loadstring()` and script injection.\
 Plugin: https://www.roblox.com/library/14802947348/Remote-Controller
+It does not show in the marketplace ro toolbox by searching, because of this : 
+https://devforum.roblox.com/t/plugin-does-not-appear-in-creator-marketplace/2622917/3
 
 # Instruction
 1. Install the plugin\
