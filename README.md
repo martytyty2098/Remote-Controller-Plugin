@@ -2,15 +2,15 @@
 A plugin that allows you to trigger remote events and functions during play mode (aka runtime) AND pass any values, (aka arguments) to them. Good for testing your game's network security from an exploiter's perspective. Uses `loadstring()` and script injection.
 
 Plugin: https://www.roblox.com/library/14802947348/Remote-Controller \
-**ONLY WORKS AT RUNTIME (AKA PLAYMODE)**
+**ONLY WORKS AT RUNTIME (AKA PLAYMODE)** \
+Source: https://www.roblox.com/library/15052192452/Remote-Controller-source
 
 It does not appear in the marketplace or toolbox when searching, because of this: 
 https://devforum.roblox.com/t/plugin-does-not-appear-in-creator-marketplace/2622917/3
 
 # Setup
 1. Install the plugin\
-https://www.roblox.com/library/14802947348/Remote-Controller \
-or download the source in releases.
+https://www.roblox.com/library/14802947348/Remote-Controller
 
 2. Enable `LoadStringEnabled` in `ServerScriptService`
 
@@ -27,7 +27,7 @@ Sounds scary, but this plugin can't work without it, see [Explanation](https://g
 After you click "Allow" you might need to restart roblox studio.
 
 # How to use
-**Usage example:** https://youtube.com
+**Usage example:** https://youtu.be/6Avn_rB5Sso (1:20)
 
 1. **AT RUNTIME (AKA PLAYMODE)** click on the plugin icon
 
