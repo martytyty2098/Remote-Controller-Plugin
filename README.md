@@ -14,15 +14,15 @@ https://www.roblox.com/library/14802947348/Remote-Controller
 
 2. Enable `LoadStringEnabled` in `ServerScriptService`
 
-You can disable it when you're done using the plugin. See [Explanation](https://github.com/martytyty2098/Remote-Controller-Plugin/edit/main/README.md#why-does-this-plugin-require-loadstringenabled)
+You can disable it when you're done using the plugin. See [Explanation](https://github.com/martytyty2098/Remote-Controller-Plugin#why-does-this-plugin-require-loadstringenabled)
 
-<img width="394" alt="Screenshot_3" src="https://github.com/martytyty2098/Remote-Controller-Plugin/assets/108870368/b6a571a1-d5cb-4ecb-a47d-7deaa227debd">
+<img width="394" alt="Screenshot_3" src="https://github.com/martytyty2098/Remote-Controller-Plugin/assets/108870368/d0ed716b-9f70-413b-bf2d-84973217ca0e">
 
 3. Allow script injection
 
-Sounds scary, but this plugin can't work without it, see [Explanation](https://github.com/martytyty2098/Remote-Controller-Plugin/edit/main/README.md#why-does-this-plugin-require-script-injection-premission)
+Sounds scary, but this plugin can't work without it, see [Explanation](https://github.com/martytyty2098/Remote-Controller-Plugin#why-does-this-plugin-require-script-injection-premission)
 
-<img width="360" alt="Screenshot_1" src="https://github.com/martytyty2098/Remote-Controller-Plugin/assets/108870368/317d8e64-5fc2-4b98-a71a-b792df4beb17">
+<img width="360" alt="Screenshot_1" src="https://github.com/martytyty2098/Remote-Controller-Plugin/assets/108870368/4a48bee7-28e5-49cf-9aa8-ca560a6301b0">
 
 After you click "Allow" you might need to restart roblox studio.
 
@@ -31,19 +31,19 @@ After you click "Allow" you might need to restart roblox studio.
 
 1. **AT RUNTIME (AKA PLAYMODE)** click on the plugin icon
 
-<img width="120" alt="Screenshot_2" src="https://github.com/martytyty2098/Remote-Controller-Plugin/assets/108870368/b2a1676e-3941-4d3e-97a4-b1911a17a970">
+<img width="120" alt="Screenshot_2" src="https://github.com/martytyty2098/Remote-Controller-Plugin/assets/108870368/54023876-47e3-41b1-b33d-787781812ce4">
 
 2. Select any `Remote Event` or `Remote Function` in the explorer
 
-<img width="189" alt="Screenshot_4" src="https://github.com/martytyty2098/Remote-Controller-Plugin/assets/108870368/f35f4e70-6fc4-4a35-bb05-da4cb6d7f5a1">
+<img width="189" alt="Screenshot_4" src="https://github.com/martytyty2098/Remote-Controller-Plugin/assets/108870368/030a3e13-39cc-4b07-95cc-fc30374f826b">
 
 3. In the text box that appears, enter any valid value like this:
 
-<img width="517" alt="Screenshot_5" src="https://github.com/martytyty2098/Remote-Controller-Plugin/assets/108870368/47d8b2ed-2c3f-4b49-bac0-aedc19870e8e">
+<img width="517" alt="Screenshot_5" src="https://github.com/martytyty2098/Remote-Controller-Plugin/assets/108870368/a652f91e-c8c2-4782-86a0-c4e3f2381340">
 
 Or like this:
 
-<img width="516" alt="Screenshot_6" src="https://github.com/martytyty2098/Remote-Controller-Plugin/assets/108870368/ebee9bda-5226-49bd-b918-e8dcae734383">
+<img width="516" alt="Screenshot_6" src="https://github.com/martytyty2098/Remote-Controller-Plugin/assets/108870368/ebe51014-6df1-44bd-8c30-410de5c559ba">
 
 4. Then click green button on the bottom or press enter on keyboard.
 
