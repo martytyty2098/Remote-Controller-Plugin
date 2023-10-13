@@ -1,3 +1,4 @@
+This file is basically the copy of this: https://devforum.roblox.com/t/remote-controller-fire-remote-eventsfunctions-at-runtime/2644884
 # Remote Controller Plugin
 A plugin that allows you to trigger remote events and functions during play mode (aka runtime) AND pass any values, (aka arguments) to them. Good for testing your game's network security from an exploiter's perspective. Uses `loadstring()` and script injection.
 
