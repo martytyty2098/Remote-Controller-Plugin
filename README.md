@@ -30,3 +30,9 @@ Or like this:
 <img width="516" alt="Screenshot_6" src="https://github.com/martytyty2098/Remote-Controller-Plugin/assets/108870368/ebe51014-6df1-44bd-8c30-410de5c559ba">
 
 4. Then click green button on the bottom or press enter on keyboard.
+
+# Upadte v0.1.0
+* Removed the usage of default loadstring() in favor of [vLua](https://devforum.roblox.com/t/vlua-loadstring-reimplemented-in-lua/2495756)
+* You don’t need to enable LoadStringEnabled anymore
+* You don’t need to enable script injection anymore
+* Some other very small changes
