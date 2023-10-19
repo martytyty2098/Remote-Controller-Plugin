@@ -13,7 +13,7 @@ scroll.Parent = widget
 -- a bar that will accept user input
 local argsBar: TextBox = scroll:WaitForChild("ArgsBar")
 
--- a button that will activate the whole thing
+-- a button that will activate all selected remotes
 local fireButton: TextButton = folder:WaitForChild("FireButton"):Clone()
 fireButton.Parent = widget
 
@@ -76,55 +76,47 @@ local function atRuntime()
 
 	local selectedEvents: { RemoteEvent } = {}
 	local selectedFunctions: { RemoteFunction } = {}
-	local eventAmount = 0
-	local functionAmount = 0
 
 	-- get all selected remote events/functions
 	selection.SelectionChanged:Connect(function()
 		table.clear(selectedEvents)
 		table.clear(selectedFunctions)
-		eventAmount = 0
-		functionAmount = 0
 
 		local selected = selection:Get()
 
 		for _, obj in pairs(selected) do
 			if obj.ClassName == "RemoteEvent" then
 				table.insert(selectedEvents, obj)
-				eventAmount += 1
 			elseif obj.ClassName == "RemoteFunction" then
 				table.insert(selectedFunctions, obj)
-				functionAmount += 1
 			end
 		end
 
-		if eventAmount == 0 and functionAmount == 0 then
+		if #selectedEvents == 0 and #selectedFunctions == 0 then
 			fireButton.Text = "NO EVENTS OR FUNCTIONS SELECTED"
 		else
 			fireButton.Text = string.format(
 				"ACTIVATE ON %d EVENT%s AND %d FUNCTION%s",
-				eventAmount,
-				eventAmount == 1 and "" or "S",
-				functionAmount,
-				functionAmount == 1 and "" or "S"
+				#selectedEvents,
+				#selectedEvents == 1 and "" or "S",
+				#selectedFunctions,
+				#selectedFunctions == 1 and "" or "S"
 			)
 		end
 	end)
 
-	-- will be used to execute loadstring on the server
-	-- loadstring() is used to convert the user's raw input, which is a basic string, into actual data types that roblox can understand
-	local sendLoadString: RemoteFunction = game:GetService("ReplicatedStorage")
-		:WaitForChild("__plugin_LoadStringBridge")
-
-	local TriggerAll = function()
+	local TriggerAllRemotes = function()
 		if run:IsServer() then
 			warn("Remote Controller plugin must be used on the client, not server")
 		end
-		-- table of values or nil if the user's input is bad, for example syntax typo like this: Vectoe3.new()
-		local values = sendLoadString:InvokeServer(argsBar.ContentText)
-		if not values then
+
+		-- not mine: https://devforum.roblox.com/t/vlua-loadstring-reimplemented-in-lua/2495756
+		local vLua_loadstring = require(folder:WaitForChild("Loadstring"))
+		local success, values = pcall(vLua_loadstring("return {" .. argsBar.ContentText .. "}"))
+
+		if not success then
 			warn(
-				"Remote Controller Plugin error: Invalid user input, possible syntax typo\n\tInput:",
+				"Remote Controller Plugin error: Invalid user input, possible syntax typo\nInput:",
 				argsBar.ContentText
 			)
 			return
@@ -138,46 +130,25 @@ local function atRuntime()
 		end
 	end
 
-	fireButton.Activated:Connect(TriggerAll)
+	fireButton.Activated:Connect(TriggerAllRemotes)
 	argsBar.FocusLost:Connect(function(enterPressed)
 		if enterPressed then
-			TriggerAll()
+			TriggerAllRemotes()
 		end
 	end)
 end
 
--- if not in play mode
-if not run:IsRunning() then
+-- if in play mode
+if run:IsRunning() then
+	atRuntime()
+else
 	button.Enabled = false
 
-	-- wait if studio hasn't loaded yet
-	while #game:GetService("Players"):GetChildren() <= 0 do
-		task.wait()
-	end
-
-	-- runs every second in studio, don't worry, performance impact is not that bad
+	-- disable gui if it lingers after runtime
 	while true do
 		task.wait(1)
-		if run:IsRunning() then
-			continue
-		end
-
-		-- create necessary things if they don't exist
-		if not game:GetService("ServerScriptService"):FindFirstChild("__plugin_LoadStringExecution") then
-			local executor: Script = folder:WaitForChild("__plugin_LoadStringExecution"):Clone()
-			executor.Enabled = true
-			executor.Parent = game:GetService("ServerScriptService")
-		end
-		if not game:GetService("ReplicatedStorage"):FindFirstChild("__plugin_LoadStringBridge") then
-			local bridge: RemoteFunction = folder:WaitForChild("__plugin_LoadStringBridge"):Clone()
-			bridge.Parent = game:GetService("ReplicatedStorage")
-		end
-
-		-- disable widget if it lingers after runtime
-		if not run:IsRunning() and widget.Enabled then
+		if widget.Enabled then
 			widget.Enabled = false
 		end
 	end
-else
-	atRuntime()
 end
